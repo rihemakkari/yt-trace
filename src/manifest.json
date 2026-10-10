@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "YT Trace",
+  "version": "0.1.0",
+  "description": "Records your own YouTube watch history locally and shows it as a timeline and chart. No server, no network requests.",
+  "permissions": ["storage"],
+  "action": {
+    "default_title": "YT Trace",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

@@ -1,0 +1,241 @@
+:root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --text: #0b0b0b;
+  --text-secondary: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+  --series: #2a78d6;
+  --danger: #d03b3b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --text: #f0efec;
+    --text-secondary: #c3c2b7;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --border: rgba(255, 255, 255, 0.1);
+    --series: #3987e5;
+  }
+}
+
+body {
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  max-width: 800px;
+  background: var(--page);
+  color: var(--text);
+  font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 15px;
+}
+
+h2 span {
+  margin-left: 6px;
+  color: var(--muted);
+  font-weight: normal;
+}
+
+#summary {
+  margin: 2px 0 0;
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+button.danger {
+  color: var(--danger);
+}
+
+section {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.empty {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* Chart */
+
+#chart {
+  position: relative;
+}
+
+#chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+#chart text {
+  fill: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+#chart .grid {
+  stroke: var(--grid);
+}
+
+#chart .baseline {
+  stroke: var(--axis);
+}
+
+#chart .bar {
+  fill: var(--series);
+}
+
+#chart .hit {
+  fill: transparent;
+}
+
+#chart .hit:hover {
+  fill: var(--border);
+}
+
+.tooltip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 6px));
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Top channels */
+
+#channels {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#channels li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 64px;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0;
+}
+
+.channel-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.channel-bar {
+  height: 12px;
+  border-radius: 0 4px 4px 0;
+  background: var(--series);
+}
+
+.channel-time {
+  color: var(--text-secondary);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Timeline */
+
+.day + .day {
+  margin-top: 20px;
+}
+
+.day h3 {
+  margin: 0 0 6px;
+  font-size: 13px;
+}
+
+.day h3 span {
+  margin-left: 6px;
+  color: var(--muted);
+  font-weight: normal;
+}
+
+.day ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.day li {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 64px;
+  gap: 12px;
+  padding: 6px 0;
+  border-top: 1px solid var(--grid);
+}
+
+.watch-time,
+.watch-duration {
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.watch-duration {
+  text-align: right;
+}
+
+.watch-title {
+  display: block;
+  overflow: hidden;
+  color: var(--text);
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.watch-title:hover {
+  text-decoration: underline;
+}
+
+.watch-channel {
+  color: var(--muted);
+  font-size: 12px;
+}

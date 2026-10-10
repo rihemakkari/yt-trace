@@ -1,0 +1,18 @@
+{
+  "name": "yt-trace",
+  "version": "0.1.0",
+  "description": "Local-only Chrome extension that records your own YouTube watch history and shows it as a timeline and chart.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "build": "node build.mjs",
+    "watch": "node build.mjs --watch",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.3.5",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  }
+}

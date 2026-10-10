@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YT Trace</title>
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>YT Trace</h1>
+        <p id="summary"></p>
+      </div>
+      <div class="actions">
+        <button id="export">Export JSON</button>
+        <button id="delete" class="danger">Delete all data</button>
+      </div>
+    </header>
+    <main>
+      <section>
+        <h2>Minutes watched per day <span>last 14 days</span></h2>
+        <div id="chart"></div>
+      </section>
+      <section>
+        <h2>Top channels <span>by watch time</span></h2>
+        <ol id="channels"></ol>
+      </section>
+      <section>
+        <h2>Timeline</h2>
+        <div id="timeline"></div>
+      </section>
+    </main>
+    <script src="dashboard.js"></script>
+  </body>
+</html>
