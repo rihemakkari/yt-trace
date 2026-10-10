@@ -3,8 +3,23 @@
 A small Chrome extension (Manifest V3) that records **your own** YouTube watch
 history in your browser and shows it as a timeline and a chart.
 
-Everything stays in `chrome.storage.local`. There is no server, the extension
-makes no network requests, and there are no analytics.
+## Privacy
+
+Your data never leaves your browser.
+
+- Everything is stored in `chrome.storage.local`, on your machine, in your
+  Chrome profile.
+- The extension makes no network requests. There is no server, no account, no
+  analytics and no telemetry.
+- It loads no remote code: no CDN scripts, fonts or images.
+- The only way data leaves the extension is the **Export JSON** button, which
+  saves a file to your own disk.
+- **Delete all data** removes every recorded watch. Uninstalling the extension
+  removes it too.
+
+You can check this yourself: the manifest asks only for the `storage`
+permission and a content script on `www.youtube.com`, and the source has no
+`fetch`, `XMLHttpRequest` or `WebSocket` calls.
 
 ## What it does
 
@@ -17,18 +32,40 @@ makes no network requests, and there are no analytics.
   - top 5 channels by watch time,
   - **Export JSON** and **Delete all data** buttons.
 
-## Install
+## Screenshots
+
+| Dashboard | Popup |
+| --- | --- |
+| ![Dashboard with chart, top channels and timeline](docs/screenshots/dashboard.png) | ![Toolbar popup](docs/screenshots/popup.png) |
+
+## Build and install
+
+You need a current LTS release of [Node.js](https://nodejs.org).
 
 ```sh
+git clone https://github.com/rihemakkari/yt-trace.git
+cd yt-trace
 npm install
 npm run build
 ```
 
-Then open `chrome://extensions`, turn on **Developer mode**, click
-**Load unpacked** and pick the `dist/` folder.
+This writes the extension to `dist/`. To load it:
 
-`npm run watch` rebuilds on change; `npm run typecheck` runs the TypeScript
-compiler. After a rebuild, reload the extension and any open YouTube tabs.
+1. Open `chrome://extensions` in Chrome.
+2. Turn on **Developer mode** (top right).
+3. Click **Load unpacked** and pick the `dist/` folder.
+4. Refresh any YouTube tabs that were already open.
+
+Watch a video for at least 10 seconds, then click the YT Trace toolbar icon
+and **Open dashboard**.
+
+### Development
+
+- `npm run watch` rebuilds the scripts on change.
+- `npm run typecheck` runs the TypeScript compiler (esbuild does not type-check).
+
+After a rebuild, click the reload icon for YT Trace on `chrome://extensions`
+and refresh open YouTube tabs.
 
 ## Permissions
 
@@ -83,4 +120,4 @@ the selectors to update are at the top of `src/content.ts`.
 
 ## License
 
-MIT
+[MIT](LICENSE)

@@ -1,2 +1,5 @@
 node_modules/
 dist/
+
+# Exported watch history ("Export JSON" saves yt-trace-YYYY-MM-DD.json)
+yt-trace-*.json
