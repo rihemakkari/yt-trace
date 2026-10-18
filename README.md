@@ -14,8 +14,8 @@ Your data never leaves your browser.
 - The extension makes no network requests. There is no server, no account, no
   analytics and no telemetry.
 - It loads no remote code: no CDN scripts, fonts or images.
-- The only way data leaves the extension is the **Export JSON** button, which
-  saves a file to your own disk.
+- The only way data leaves the extension is the **Export JSON** and
+  **Export CSV** buttons, which save a file to your own disk.
 - **Delete all data** removes every recorded watch. Uninstalling the extension
   removes it too.
 
@@ -32,7 +32,7 @@ permission and a content script on `www.youtube.com`, and the source has no
   - a timeline grouped by day, newest first,
   - minutes watched per day for the last 14 days,
   - top 5 channels by watch time,
-  - **Export JSON** and **Delete all data** buttons.
+  - **Export JSON**, **Export CSV** and **Delete all data** buttons.
 
 ## Screenshots
 
@@ -65,7 +65,7 @@ and **Open dashboard**.
 
 - `npm run watch` rebuilds the scripts on change.
 - `npm run typecheck` runs the TypeScript compiler (esbuild does not type-check).
-- `npm test` runs the Vitest unit tests for `src/stats.ts`.
+- `npm test` runs the Vitest unit tests for `src/stats.ts` and the CSV export.
 - `npm run lint` runs ESLint with typescript-eslint.
 
 CI runs all of these and the build on every push and pull request, and
@@ -106,7 +106,24 @@ interface Watch {
 }
 ```
 
-The export is `{ "version": 1, "exportedAt": "<ISO date>", "watches": Watch[] }`.
+**Export JSON** saves `yt-trace-YYYY-MM-DD.json`:
+`{ "version": 1, "exportedAt": "<ISO date>", "watches": Watch[] }`.
+
+**Export CSV** saves `yt-trace-YYYY-MM-DD.csv`, one row per watch, newest
+first:
+
+```csv
+video_id,title,channel,started_at,seconds_watched
+dQw4w9WgXcQ,"Rock, ""Paper"" & more",Chaîne,2026-10-18T14:30:00.000Z,125
+```
+
+- `started_at` is ISO 8601 in UTC; `seconds_watched` is a whole number.
+- Encoded as UTF-8 with a byte order mark, so Excel shows accented characters
+  correctly. Lines end in CRLF.
+- Fields are quoted per RFC 4180 when they contain a comma, double quote or
+  line break, and double quotes inside them are doubled.
+- A title or channel that starts with `=`, `+`, `-`, `@` or a tab gets a
+  leading `'` so spreadsheets treat it as text, not a formula.
 
 ## Project layout
 
@@ -119,7 +136,7 @@ src/
   stats.test.ts   unit tests for stats.ts
   content.ts      watch tracker that runs on YouTube
   popup/          toolbar popup
-  dashboard/      dashboard page and SVG chart
+  dashboard/      dashboard page, SVG chart and CSV export
 build.mjs         esbuild script, outputs to dist/
 ```
 

@@ -1,5 +1,6 @@
 node_modules/
 dist/
 
-# Exported watch history ("Export JSON" saves yt-trace-YYYY-MM-DD.json)
+# Exported watch history ("Export JSON"/"Export CSV" save yt-trace-YYYY-MM-DD.json/.csv)
 yt-trace-*.json
+yt-trace-*.csv

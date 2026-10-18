@@ -27,7 +27,7 @@ npm run lint       # eslint with typescript-eslint
 ```
 
 - esbuild does not type-check, so run `npm run typecheck` as well as the build.
-- Tests cover only the pure logic in `src/stats.ts` (`src/stats.test.ts`). Build test dates with the local-time `Date` constructor so they pass in any time zone.
+- Tests cover only pure logic: `src/stats.ts` and `src/dashboard/csv.ts`, each with a `.test.ts` next to it. Build test dates with the local-time `Date` constructor so they pass in any time zone.
 - TypeScript is pinned to 6.x because typescript-eslint doesn't support TypeScript 7 yet.
 - CI (`.github/workflows/ci.yml`) runs typecheck, lint, test and build on push and pull request, and uploads `dist/`.
 - `build.mjs` copies the static files (`manifest.json`, HTML, CSS) once at startup, so in watch mode changes to those need a restart. A new static file must be added to the `statics` list there, and a new script to `entryPoints`.
@@ -40,7 +40,7 @@ Three bundles share `src/types.ts`, `src/storage.ts` and `src/stats.ts`:
 
 - `src/content.ts` runs on YouTube and writes watches.
 - `src/popup/` shows today's total and links to the dashboard.
-- `src/dashboard/` reads watches and renders the timeline, chart (`chart.ts`) and top channels.
+- `src/dashboard/` reads watches and renders the timeline, chart (`chart.ts`) and top channels. `csv.ts` builds the CSV export and is pure, like `stats.ts`.
 
 `storage.ts` is the only module that touches `chrome.storage.local`. `stats.ts` is pure (no DOM, no `chrome`), and takes watches already sorted newest first, which is how `loadWatches()` returns them.
 
@@ -50,7 +50,7 @@ Each watch is its own key, `w:<id>` with `id = ${startedAt}-${videoId}`, rather 
 
 Days are never stored. They are derived from `startedAt` in local time at render, and a watch belongs to the day it started.
 
-The JSON export is `{ version: 1, exportedAt, watches }`. Bump `version` if the `Watch` shape changes.
+The JSON export is `{ version: 1, exportedAt, watches }`. Bump `version` if the `Watch` shape changes. The CSV export (`video_id,title,channel,started_at,seconds_watched`) has no version field, so keep its columns stable; it is written with a UTF-8 BOM for Excel, and `csvField` also neutralises formula-like text.
 
 ### Watch tracking (`content.ts`)
 

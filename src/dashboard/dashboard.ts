@@ -2,6 +2,7 @@ import { formatDuration, groupByDay, secondsPerDay, topChannels, totalSeconds } 
 import { deleteAllWatches, loadWatches } from "../storage";
 import type { ExportFile, Watch } from "../types";
 import { renderBarChart } from "./chart";
+import { toCsv } from "./csv";
 
 const CHART_DAYS = 14;
 const TOP_CHANNELS = 5;
@@ -78,14 +79,24 @@ async function render(): Promise<void> {
   renderTimeline(watches);
 }
 
-async function exportJson(): Promise<void> {
-  const file: ExportFile = { version: 1, exportedAt: new Date().toISOString(), watches: await loadWatches() };
-  const url = URL.createObjectURL(new Blob([JSON.stringify(file, null, 2)], { type: "application/json" }));
+function download(parts: BlobPart[], type: string, filename: string): void {
+  const url = URL.createObjectURL(new Blob(parts, { type }));
   const link = h("a");
   link.href = url;
-  link.download = `yt-trace-${file.exportedAt.slice(0, 10)}.json`;
+  link.download = filename;
   link.click();
   URL.revokeObjectURL(url);
+}
+
+async function exportJson(): Promise<void> {
+  const file: ExportFile = { version: 1, exportedAt: new Date().toISOString(), watches: await loadWatches() };
+  download([JSON.stringify(file, null, 2)], "application/json", `yt-trace-${file.exportedAt.slice(0, 10)}.json`);
+}
+
+async function exportCsv(): Promise<void> {
+  const date = new Date().toISOString().slice(0, 10);
+  // The BOM makes Excel read the file as UTF-8 instead of the system code page.
+  download(["\uFEFF", toCsv(await loadWatches())], "text/csv;charset=utf-8", `yt-trace-${date}.csv`);
 }
 
 async function deleteAll(): Promise<void> {
@@ -94,6 +105,7 @@ async function deleteAll(): Promise<void> {
 }
 
 $("export").addEventListener("click", () => void exportJson());
+$("export-csv").addEventListener("click", () => void exportCsv());
 $("delete").addEventListener("click", () => void deleteAll());
 // Also keeps the page live while a video is playing in another tab.
 chrome.storage.onChanged.addListener(() => void render());
