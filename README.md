@@ -1,5 +1,7 @@
 # YT Trace
 
+[![CI](https://github.com/rihemakkari/yt-trace/actions/workflows/ci.yml/badge.svg)](https://github.com/rihemakkari/yt-trace/actions/workflows/ci.yml)
+
 A small Chrome extension (Manifest V3) that records **your own** YouTube watch
 history in your browser and shows it as a timeline and a chart.
 
@@ -63,6 +65,11 @@ and **Open dashboard**.
 
 - `npm run watch` rebuilds the scripts on change.
 - `npm run typecheck` runs the TypeScript compiler (esbuild does not type-check).
+- `npm test` runs the Vitest unit tests for `src/stats.ts`.
+- `npm run lint` runs ESLint with typescript-eslint.
+
+CI runs all of these and the build on every push and pull request, and
+uploads `dist/` as a build artifact.
 
 After a rebuild, click the reload icon for YT Trace on `chrome://extensions`
 and refresh open YouTube tabs.
@@ -109,6 +116,7 @@ src/
   types.ts        Watch type and export format
   storage.ts      the only module that touches chrome.storage.local
   stats.ts        pure functions for grouping and totals
+  stats.test.ts   unit tests for stats.ts
   content.ts      watch tracker that runs on YouTube
   popup/          toolbar popup
   dashboard/      dashboard page and SVG chart

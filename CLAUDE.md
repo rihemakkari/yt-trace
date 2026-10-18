@@ -22,10 +22,14 @@ These are product requirements, not defaults to revisit:
 npm run build      # bundle to dist/ (load this folder via chrome://extensions → Load unpacked)
 npm run watch      # rebuild TypeScript on change
 npm run typecheck  # tsc, noEmit
+npm test           # vitest run (unit tests for stats.ts)
+npm run lint       # eslint with typescript-eslint
 ```
 
 - esbuild does not type-check, so run `npm run typecheck` as well as the build.
-- There are no tests and no linter.
+- Tests cover only the pure logic in `src/stats.ts` (`src/stats.test.ts`). Build test dates with the local-time `Date` constructor so they pass in any time zone.
+- TypeScript is pinned to 6.x because typescript-eslint doesn't support TypeScript 7 yet.
+- CI (`.github/workflows/ci.yml`) runs typecheck, lint, test and build on push and pull request, and uploads `dist/`.
 - `build.mjs` copies the static files (`manifest.json`, HTML, CSS) once at startup, so in watch mode changes to those need a restart. A new static file must be added to the `statics` list there, and a new script to `entryPoints`.
 - `dist/` is flat: HTML files reference `popup.js`, `dashboard.js` and `dashboard.css` by bare name, and the manifest references `content.js`.
 - After rebuilding, the extension must be reloaded in Chrome and open YouTube tabs refreshed; this can't be verified from the command line.
